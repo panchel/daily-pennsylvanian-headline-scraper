@@ -41,7 +41,6 @@ def scrape_data_point():
     req = requests.get("https://www.thedp.com")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
-    article_titles = []
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
         most_read_section = soup.find("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
