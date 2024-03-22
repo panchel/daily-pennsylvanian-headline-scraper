@@ -10,6 +10,10 @@ Tools like GitHub Actions, GitLab CI and others make git scraping adaptable to d
 
 This template includes a sample workflow to demonstrate the core git scraping capabilities. Read on to learn how to customize it!
 
+## Chelsea's Modifications
+I edited the scrape_data_point() function inside the script.py script to grab all the headlines of articles listed on the first page of the Opinion page. First, I changed the requests link to be https://www.thedp.com/section/opinion to grab info from only the opinion page. Then, I grab all <h3> elements listed under class "standard-link", which I found by inspecting the Opinion page. I finally loop through each of these elements to grab the stripped version of their Title text. It cleans the text for any extra spaces. I return this list of titles and save it to a new file path data/daily_penn_opinion_headlines.json.
+
+
 ## Overview
 
 The workflow defined in `.github/workflows/scrape.yaml` runs on a defined schedule to:
