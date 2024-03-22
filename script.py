@@ -42,14 +42,12 @@ def scrape_data_point():
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
     if req.ok:
+        if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        most_read_section = soup.find("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
-        if most_read_section:
-            most_read_container = most_read_section.find_next("span", id="mostRead")
-            first_article_link = most_read_container.find("a", class_="frontpage-link standard-link")
-            data_point = "" if first_article_link is None else first_article_link.text
-            loguru.logger.info(f"Data point: {data_point}")
-            return data_point
+        target_elements = soup.find_all("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
+        article_titles = [element.text.strip() for element in target_elements]
+        loguru.logger.info(f"Article titles: {article_titles}")
+        return article_titles
 
 if __name__ == "__main__":
 
