@@ -44,15 +44,13 @@ def scrape_data_point():
     article_titles = []
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        most_read = soup.find("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
-        if most_read:
-            most_read_container = most_read.find_next("span", id="mostRead")
-            article_links = most_read_container.find_all("a", class_="frontpage-link standard-link")
-            for link in article_links:
-                title = link.text
-                article_titles.append(title)
-        return article_titles
-
+        most_read_section = soup.find("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
+        if most_read_section:
+            most_read_container = most_read_section.find_next("span", id="mostRead")
+            first_article_link = most_read_container.find("a", class_="frontpage-link standard-link")
+            data_point = "" if first_article_link is None else first_article_link.text
+            loguru.logger.info(f"Data point: {data_point}")
+            return data_point
 
 if __name__ == "__main__":
 
