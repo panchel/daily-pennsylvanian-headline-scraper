@@ -13,6 +13,24 @@ import requests
 import loguru
 
 
+# def scrape_data_point():
+#     """
+#     Scrapes the main headline from The Daily Pennsylvanian home page.
+
+#     Returns:
+#         str: The headline text if found, otherwise an empty string.
+#     """
+#     req = requests.get("https://www.thedp.com")
+#     loguru.logger.info(f"Request URL: {req.url}")
+#     loguru.logger.info(f"Request status code: {req.status_code}")
+
+#     if req.ok:
+#         soup = bs4.BeautifulSoup(req.text, "html.parser")
+#         target_element = soup.find("a", class_="frontpage-link")
+#         data_point = "" if target_element is None else target_element.text
+#         loguru.logger.info(f"Data point: {data_point}")
+#         return data_point
+
 def scrape_data_point():
     """
     Scrapes the main headline from The Daily Pennsylvanian home page.
@@ -23,13 +41,17 @@ def scrape_data_point():
     req = requests.get("https://www.thedp.com")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
-
+    article_titles = []
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("a", class_="frontpage-link")
-        data_point = "" if target_element is None else target_element.text
-        loguru.logger.info(f"Data point: {data_point}")
-        return data_point
+        most_read = soup.find("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
+        if most_read:
+            most_read_container = most_read.find_next("span", id="mostRead")
+            article_links = most_read_container.find_all("a", class_="frontpage-link standard-link")
+            for link in article_links:
+                title = link.text
+                article_titles.append(title)
+        return article_titles
 
 
 if __name__ == "__main__":
