@@ -1,5 +1,5 @@
 """
-Scrapes a headline from The Daily Pennsylvanian website and saves it to a 
+Scrapes a headline from The Daily Pennsylvanian Opinion website and saves it to a 
 JSON file that tracks headlines over time.
 """
 
@@ -33,21 +33,20 @@ import loguru
 
 def scrape_data_point():
     """
-    Scrapes the main headline from The Daily Pennsylvanian home page.
+    Scrapes all headlines from The Daily Pennsylvanian Opinion page.
 
     Returns:
         str: The headline text if found, otherwise an empty string.
     """
-    req = requests.get("https://www.thedp.com")
+    req = requests.get("https://www.thedp.com/section/opinion")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
     if req.ok:
-        if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_elements = soup.find_all("h3", class_="frontpage-section frontpage-section-inverse section-most-read")
-        article_titles = [element.text.strip() for element in target_elements]
-        loguru.logger.info(f"Article titles: {article_titles}")
-        return article_titles
+        title_elements = soup.find_all("h3", class_="standard-link")
+        titles = [title.text.strip() for title in title_elements]
+        return titles
+    return []
 
 if __name__ == "__main__":
 
@@ -65,7 +64,7 @@ if __name__ == "__main__":
     # Load daily event monitor
     loguru.logger.info("Loading daily event monitor")
     dem = daily_event_monitor.DailyEventMonitor(
-        "data/daily_pennsylvanian_headlines.json"
+        "data/daily_penn_opinion_headlines.json"
     )
 
     # Run scrape
