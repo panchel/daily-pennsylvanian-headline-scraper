@@ -9,8 +9,8 @@ import sys
 import daily_event_monitor
 
 import bs4
-import requests
 import loguru
+import requests
 
 
 # def scrape_data_point():
